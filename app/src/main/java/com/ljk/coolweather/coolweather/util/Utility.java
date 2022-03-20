@@ -2,15 +2,28 @@ package com.ljk.coolweather.coolweather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.ljk.coolweather.coolweather.db.City;
 import com.ljk.coolweather.coolweather.db.County;
 import com.ljk.coolweather.coolweather.db.Province;
+import com.ljk.coolweather.coolweather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Utility {
+    public static Weather handleWeatherResponse(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
     //负责对json数据解析
     public static boolean handlerProvinceResponse(String response){
         if (!TextUtils.isEmpty(response)){
